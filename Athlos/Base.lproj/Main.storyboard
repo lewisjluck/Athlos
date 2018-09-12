@@ -15,7 +15,7 @@
         <!--Welcome-->
         <scene sceneID="OF7-yj-q4l">
             <objects>
-                <viewController title="Welcome" id="bPf-ma-Mal" customClass="WelcomeViewController" customModule="SportScore" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="Welcome" id="bPf-ma-Mal" customClass="WelcomeViewController" customModule="Athlos" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="2GL-Yi-V5b">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -88,7 +88,7 @@
         <!--Scorer-->
         <scene sceneID="KTc-St-zvn">
             <objects>
-                <viewController id="PgH-2Y-bPu" customClass="ScorerViewController" customModule="SportScore" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="PgH-2Y-bPu" customClass="ScorerViewController" customModule="Athlos" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="AOs-Mx-geT">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="672"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -183,13 +183,13 @@
                                                 <rect key="frame" x="68" y="265.33333333333326" width="71.333333333333314" height="289.66666666666674"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PCd-4h-Tuc">
-                                                        <rect key="frame" x="0.0" y="0.0" width="71.333333333333329" height="121.66666666666667"/>
+                                                        <rect key="frame" x="0.33333333333331439" y="0.0" width="71.333333333333329" height="121.66666666666667"/>
                                                         <fontDescription key="fontDescription" name="Verdana-Bold" family="Verdana" pointSize="100"/>
                                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lZL-wz-rCc">
-                                                        <rect key="frame" x="4.3333333333333179" y="143.66666666666669" width="62.333333333333343" height="62"/>
+                                                        <rect key="frame" x="4.6666666666666323" y="143.66666666666669" width="62.333333333333343" height="62"/>
                                                         <constraints>
                                                             <constraint firstAttribute="width" secondItem="lZL-wz-rCc" secondAttribute="height" multiplier="1:1" id="gFZ-k8-Zjh"/>
                                                         </constraints>
@@ -199,7 +199,7 @@
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KER-GM-t7b">
-                                                        <rect key="frame" x="4.3333333333333179" y="227.66666666666669" width="62.333333333333343" height="62"/>
+                                                        <rect key="frame" x="4.6666666666666323" y="227.66666666666669" width="62.333333333333343" height="62"/>
                                                         <constraints>
                                                             <constraint firstAttribute="width" secondItem="KER-GM-t7b" secondAttribute="height" multiplier="1:1" id="LVW-Co-uNz"/>
                                                         </constraints>
