@@ -12,6 +12,7 @@
 		FF41605D213B583F002B3666 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FF41605C213B583F002B3666 /* Assets.xcassets */; };
 		FF416060213B583F002B3666 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FF41605E213B583F002B3666 /* LaunchScreen.storyboard */; };
 		FF41608C21436A10002B3666 /* ScorerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF41608B21436A10002B3666 /* ScorerViewController.swift */; };
+		FFC0E17E214A7DEF009DEE4F /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC0E17D214A7DEF009DEE4F /* User.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,6 +23,7 @@
 		FF41605F213B583F002B3666 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		FF416061213B583F002B3666 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		FF41608B21436A10002B3666 /* ScorerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScorerViewController.swift; sourceTree = "<group>"; };
+		FFC0E17D214A7DEF009DEE4F /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,6 +58,7 @@
 			children = (
 				FF416055213B5835002B3666 /* AppDelegate.swift */,
 				FF41608B21436A10002B3666 /* ScorerViewController.swift */,
+				FFC0E17D214A7DEF009DEE4F /* User.swift */,
 				FF416059213B5835002B3666 /* Main.storyboard */,
 				FF41605C213B583F002B3666 /* Assets.xcassets */,
 				FF41605E213B583F002B3666 /* LaunchScreen.storyboard */,
@@ -137,6 +140,7 @@
 			files = (
 				FF416056213B5835002B3666 /* AppDelegate.swift in Sources */,
 				FF41608C21436A10002B3666 /* ScorerViewController.swift in Sources */,
+				FFC0E17E214A7DEF009DEE4F /* User.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
