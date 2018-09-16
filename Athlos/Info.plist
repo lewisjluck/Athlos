@@ -30,6 +30,10 @@
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Lets you take a photo of yourself for your profile picture</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Lets you choose a photo for your profile picture</string>
 	<key>UIRequiredDeviceCapabilities</key>
 	<array>
 		<string>armv7</string>

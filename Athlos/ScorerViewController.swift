@@ -18,6 +18,10 @@ class ScorerViewController: UIViewController {
     var score1 = 0
     var score2 = 0
     
+    @IBAction func unwindFromGameSettings(unwindSegue: UIStoryboardSegue) {
+        
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
             updateUI()
@@ -58,6 +62,8 @@ class ScorerViewController: UIViewController {
         }
     }
     
+    
+    
     func updateUI() {
         scoreLabel1.text = "\(score1)"
         scoreLabel2.text = "\(score2)"
@@ -65,11 +71,14 @@ class ScorerViewController: UIViewController {
     
     let audioEngine = AVAudioEngine()
     let speechRecognizer: SFSpeechRecognizer? = SFSpeechRecognizer()
-    let request = SFSpeechAudioBufferRecognitionRequest()
+    var request = SFSpeechAudioBufferRecognitionRequest()
     var recognitionTask: SFSpeechRecognitionTask?
     
     func recordAndRecognizeSpeech() {
-        microphoneBarItem.image = #imageLiteral(resourceName: "Microphone icon")
+        microphoneBarItem.image = #imageLiteral(resourceName: "Speech")
+        
+        request = SFSpeechAudioBufferRecognitionRequest()
+        
         let node = audioEngine.inputNode
         let recordingFormat = node.outputFormat(forBus: 0)
         node.installTap(onBus: 0, bufferSize: 1024, format: recordingFormat) {
@@ -97,8 +106,8 @@ class ScorerViewController: UIViewController {
             
             if lowercasedLastString == "one" || lowercasedLastString == "1" || lowercasedLastString == "two" || lowercasedLastString == "2" || lowercasedLastString == "to" || lowercasedLastString == "too"  {
             print("ifStatementCalled")
-            self.addScore(string: lastString)
             self.stopAudio()
+            self.addScore(string: lastString)
             }
         } else if let error = error {
             print(error)
@@ -110,7 +119,8 @@ class ScorerViewController: UIViewController {
         request.endAudio()
         recognitionTask?.cancel()
         audioEngine.inputNode.removeTap(onBus:0)
-        microphoneBarItem.image = #imageLiteral(resourceName: "Microphone off icon")
+        microphoneBarItem.image = #imageLiteral(resourceName: "Speech Off")
+        print("Speech Stopped")
     }
     
     func addScore(string: String) {
@@ -126,6 +136,7 @@ class ScorerViewController: UIViewController {
         default: break
         }
         updateUI()
+        recordAndRecognizeSpeech()
     }
 
     /*

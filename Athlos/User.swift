@@ -14,23 +14,25 @@ struct User: Equatable, CustomStringConvertible, Codable, Comparable {
     var lastName: String
     var nickname: String?
     var profilePicture: Data?
-    var themeColour: Colour?
+    var themeColour: String?
     var id: Int {
         return User.users.count
     }
     
-    mutating func setRandomProfilePicture() {
-        let randomNumber = Int(arc4random_uniform(4))
-        var randomProfilePicture: UIImage
-        switch randomNumber {
-        case 0: randomProfilePicture = #imageLiteral(resourceName: "man")
-        case 1: randomProfilePicture = #imageLiteral(resourceName: "man-1")
-        case 2: randomProfilePicture = #imageLiteral(resourceName: "man-2")
-        case 3: randomProfilePicture = #imageLiteral(resourceName: "boy-1")
-        default: randomProfilePicture = #imageLiteral(resourceName: "man-1")
+    static func convertToColour(colour: String) -> UIColor {
+        var selectedThemeColour: UIColor = UIColor.blue
+        switch colour {
+            case "Red": selectedThemeColour = UIColor(displayP3Red: 252/255, green: 33/255, blue: 37/255, alpha: 0.75)
+            case "Blue": selectedThemeColour = UIColor(displayP3Red: 29/255, green: 155/255, blue: 246/255, alpha: 0.75)
+            case "Green": selectedThemeColour = UIColor(displayP3Red: 86/255, green: 215/255, blue: 43/255, alpha: 0.75)
+            case "Orange": selectedThemeColour = UIColor(displayP3Red: 253/255, green: 130/255, blue: 8/255, alpha: 0.75)
+            case "Yellow": selectedThemeColour = UIColor(displayP3Red: 254/255, green: 195/255, blue: 9/255, alpha: 0.75)
+            case "Brown": selectedThemeColour = UIColor(displayP3Red: 144/255, green: 113/255, blue: 76/255, alpha: 0.75)
+            case "Grey": selectedThemeColour = UIColor(displayP3Red: 0, green: 0, blue: 0, alpha: 0.75)
+            case "Purple": selectedThemeColour = UIColor(displayP3Red: 191/255, green: 87/255, blue: 218/255, alpha: 0.75)
+            default: break
         }
-        let randomPictureData = UIImagePNGRepresentation(randomProfilePicture)
-        self.profilePicture = randomPictureData
+        return selectedThemeColour
     }
     
     func convertToImage() -> UIImage? {
@@ -89,24 +91,51 @@ struct User: Equatable, CustomStringConvertible, Codable, Comparable {
         return "\(firstName) \(lastName)"
     }
     
-    init(firstName: String, lastName: String) {
-        self.firstName = firstName
-        self.lastName = lastName
-        nickname = nil
-        profilePicture = nil
-        themeColour = nil
-    }
-    
-    init(firstName: String, lastName: String, nickname: String, profilePicture: UIImage, themeColour: Colour) {
+    init(firstName: String, lastName: String, nickname: String?, profilePicture: UIImage?, themeColour: String?) {
         self.firstName = firstName
         self.lastName = lastName
         self.nickname = nickname
-        let profilePictureData = UIImagePNGRepresentation(profilePicture)!
-        self.profilePicture = profilePictureData
-        self.themeColour = themeColour
+        if let profilePicture = profilePicture {
+            let profilePictureData = UIImageJPEGRepresentation(profilePicture, 0.7)
+            self.profilePicture = profilePictureData
+        } else {
+                let randomNumber = Int(arc4random_uniform(4))
+                var randomProfilePicture: UIImage
+                switch randomNumber {
+                case 0: randomProfilePicture = #imageLiteral(resourceName: "man")
+                case 1: randomProfilePicture = #imageLiteral(resourceName: "man-1")
+                case 2: randomProfilePicture = #imageLiteral(resourceName: "man-2")
+                case 3: randomProfilePicture = #imageLiteral(resourceName: "boy-1")
+                default: randomProfilePicture = #imageLiteral(resourceName: "man-1")
+                }
+                let randomPictureData = UIImageJPEGRepresentation(randomProfilePicture, 0.7)
+                self.profilePicture = randomPictureData
+            }
+        if let themeColour = themeColour {
+            self.themeColour = themeColour
+        } else {
+            let randomNumber = Int(arc4random_uniform(8))
+            var randomThemeColour: String = "Blue"
+            switch randomNumber {
+            case 0: randomThemeColour = "Blue"
+            case 1: randomThemeColour = "Red"
+            case 2: randomThemeColour = "Green"
+            case 3: randomThemeColour = "Orange"
+            case 4: randomThemeColour = "Yellow"
+            case 5: randomThemeColour = "Purple"
+            case 6: randomThemeColour = "Grey"
+            case 7: randomThemeColour = "Brown"
+            default: break
+            }
+            self.themeColour = randomThemeColour
+        }
     }
     
-    static var users: [User] = []
+    static var users: [User] = [] {
+        didSet {
+            User.saveToFile()
+        }
+    }
     
     static let DocumentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
     static let ArchiveURL = DocumentsDirectory.appendingPathComponent("users").appendingPathExtension("plist")
@@ -115,12 +144,13 @@ struct User: Equatable, CustomStringConvertible, Codable, Comparable {
         let users = User.users
         let encoder = PropertyListEncoder()
         let encodedUsers = try? encoder.encode(users)
-        try? encodedUsers?.write(to: User.ArchiveURL)
+        try? encodedUsers?.write(to: User.ArchiveURL, options: .noFileProtection)
+        print("Data has been saved")
     }
     
     static func loadFromFile() -> [User]? {
         let decoder = PropertyListDecoder()
-        if let retrievedUserData = try? Data(contentsOf: ArchiveURL), let decodedUsers = try? decoder.decode(Array<User>.self, from: retrievedUserData) {
+        if let retrievedUserData = try? Data(contentsOf: User.ArchiveURL), let decodedUsers = try? decoder.decode(Array<User>.self, from: retrievedUserData) {
             return decodedUsers
         } else {
             return nil
@@ -131,25 +161,48 @@ struct User: Equatable, CustomStringConvertible, Codable, Comparable {
 struct Game: Codable {
     var won: Bool?
     var score: Int = 0
-    var sport: Sport = .tableTennis
+    var sport: String = "Table Tennis"
     var sets: Bool = false
     var setNumber: Int?
     var date: Date = Date()
 }
 
-enum Sport: Int, Codable {
-    case tableTennis, football
-}
+let sportArray = ["Table Tennis", "Football"]
 
-enum Colour: Int, Codable {
-    case blue, red, green, orange, yellow, pink, purple, grey
-}
+let colourArray = ["Blue", "Red", "Green", "Orange", "Yellow", "Brown", "Purple", "Grey"]
 
 struct GameSettings: Codable {
     var playerOne: User?
     var playerTwo: User?
     var scoreToWin: Int?
+    var setsToWin: Int?
+    
+    static let DocumentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+    static let ArchiveURL = DocumentsDirectory.appendingPathComponent("game_settings").appendingPathExtension("plist")
+    
+    static func saveToFile(gameSettings: GameSettings) {
+        let encoder = PropertyListEncoder()
+        let encodedGameSettings = try? encoder.encode(gameSettings)
+        try? encodedGameSettings?.write(to: GameSettings.ArchiveURL, options: .noFileProtection)
+        print("Data has been saved")
+    }
+    
+    static func loadFromFile() -> GameSettings? {
+        let decoder = PropertyListDecoder()
+        if let retrievedGameSettingsData = try? Data(contentsOf: GameSettings.ArchiveURL), let decodedGameSettings = try? decoder.decode(GameSettings.self, from: retrievedGameSettingsData) {
+            return decodedGameSettings
+        } else {
+            return nil
+        }
+    }
 }
+
+var gameSettings: GameSettings = GameSettings() {
+    didSet {
+        GameSettings.saveToFile(gameSettings: gameSettings)
+    }
+}
+
 
 
 

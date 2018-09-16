@@ -4,7 +4,7 @@
 //
 //  Created by Lewis Luck on 2/9/18.
 //  Copyright © 2018 Fortune Inc. All rights reserved.
-//  Images sourced from Flaticon.com
+//  Images sourced from Flaticon.com and Google Images
 
 import UIKit
 
@@ -15,7 +15,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+        if let savedUsers = User.loadFromFile() {
+            print("Data has been found")
+        User.users = savedUsers
+        }
+        if let savedGameSettings = GameSettings.loadFromFile() {
+            gameSettings = savedGameSettings
+        }
         return true
     }
 
@@ -39,6 +45,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+        
     }
 
 
