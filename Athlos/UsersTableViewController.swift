@@ -20,6 +20,8 @@ class UsersTableViewController: UITableViewController {
         self.navigationItem.rightBarButtonItem?.tintColor = UIColor.white
     }
     
+    var userIndex = 0
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -51,8 +53,25 @@ class UsersTableViewController: UITableViewController {
     
     @IBAction func unwindFromAddUser(unwindSegue: UIStoryboardSegue) {
         guard let source = unwindSegue.source as? AddEditUserTableViewController, let addedUser = source.user else {return}
-        User.users.append(addedUser)
-        tableView.reloadData()
+        if source.editingUser == true {
+            var editedUser = User.users[userIndex]
+            editedUser.firstName = addedUser.firstName
+            editedUser.lastName = addedUser.lastName
+            editedUser.nickname = addedUser.nickname
+            editedUser.themeColour = addedUser.themeColour
+            editedUser.profilePicture = addedUser.profilePicture
+            if User.users[userIndex] == gameSettings.playerOne {
+                gameSettings.playerOne = editedUser
+            }
+            if User.users[userIndex] == gameSettings.playerTwo {
+                gameSettings.playerTwo = editedUser
+            }
+            User.users[userIndex] = editedUser
+            userIndex = 0
+        } else {
+            User.users.append(addedUser)
+            tableView.reloadData()
+        }
     }
 
     /*
@@ -72,14 +91,16 @@ class UsersTableViewController: UITableViewController {
             
             let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
             let deleteAction = UIAlertAction(title: "Delete", style: .destructive) { (action) in
-                User.users.remove(at: indexPath.row)
-                tableView.deleteRows(at: [indexPath], with: .fade)
                 let user = User.users[indexPath.row]
                 if user == gameSettings.playerOne {
                     gameSettings.playerOne = nil
                 } else if user == gameSettings.playerTwo {
                     gameSettings.playerTwo = nil
-                } 
+                }
+                User.users.remove(at: indexPath.row)
+                tableView.deleteRows(at: [indexPath], with: .fade)
+                
+                
             }
             
             alertController.addAction(cancelAction)
@@ -117,9 +138,12 @@ class UsersTableViewController: UITableViewController {
         if segue.identifier == "EditUser" {
             if let selectedIndexPath = tableView.indexPathForSelectedRow {
             let selectedUser = User.users[selectedIndexPath.row]
+            self.userIndex = selectedIndexPath.row
             let segueDestination = segue.destination as! UINavigationController
             let destination = segueDestination.topViewController as! AddEditUserTableViewController
+            destination.title = selectedUser.description
             destination.user = selectedUser
+            destination.editingUser = true
             }
         }
     }

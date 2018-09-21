@@ -23,18 +23,52 @@ class AddEditUserTableViewController: UITableViewController, UIImagePickerContro
     var lastName: String? {
         return lastNameLabel.text
     }
-    var nickname: String?
-    var profilePicture: UIImage?
-    var themeColour: String?
+    var nickname: String? {
+        if nicknameLabel.text == nil || nicknameLabel.text == "" {
+            return nil
+        } else {
+        return nicknameLabel.text
+        }
+    }
+    var profilePicture: UIImage? {
+        return profilePictureImage.image
+    }
+    var themeColour: String? {
+        if themeColourLabel.text == nil || themeColourLabel.text == "" || themeColourLabel.text == "Select" {
+            return nil
+        } else {
+        return themeColourLabel.text
+        }
+    }
     
     var user: User?
     
+    var editingUser: Bool = false
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "saveUser" {
+            if self.user != nil {
+                self.user = User(firstName: firstName!, lastName: lastName!, nickname: nickname, profilePicture: profilePicture, themeColour: themeColour)
+            } else {
+            self.user = User(firstName: firstName!, lastName: lastName!, nickname: nickname, profilePicture: profilePicture, themeColour: themeColour)
+            }
+        }
+    }
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
         updateUI()
-        updateSaveButton()
+        if let user = self.user {
+            firstNameLabel.text = user.firstName
+            lastNameLabel.text = user.lastName
+            profilePictureImage.image = user.convertToImage()
+            nicknameLabel.text = user.nickname
+            if let userThemeColour = user.themeColour {
+                themeColourCell.backgroundColor = User.convertToColour(colour: userThemeColour)
+                themeColourLabel.text = userThemeColour
+            }
+        }
 
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
@@ -56,7 +90,6 @@ class AddEditUserTableViewController: UITableViewController, UIImagePickerContro
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.section == 3 && indexPath.row == 0 {
-            print("Hello")
             performSegue(withIdentifier: "ChooseColour", sender: nil)
         }
         
@@ -90,7 +123,7 @@ class AddEditUserTableViewController: UITableViewController, UIImagePickerContro
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         if let selectedImage = info[UIImagePickerControllerOriginalImage] as? UIImage {
-            profilePicture = selectedImage
+            profilePictureImage.image = selectedImage
             dismiss(animated: true, completion: nil)
             updateUI()
         }
@@ -100,10 +133,7 @@ class AddEditUserTableViewController: UITableViewController, UIImagePickerContro
     }
     
     func updateColourCell() {
-        if let user = self.user {
-            themeColourCell.backgroundColor = User.convertToColour(colour: user.themeColour!)
-            themeColourLabel.text = user.themeColour
-        } else if let themeColour = themeColour {
+         if let themeColour = themeColour {
             themeColourCell.backgroundColor = User.convertToColour(colour: themeColour)
             themeColourLabel.text = themeColour
         } else {
@@ -124,31 +154,22 @@ class AddEditUserTableViewController: UITableViewController, UIImagePickerContro
     
     func updateUI() {
         updateColourCell()
+        updateSaveButton()
         if profilePicture != nil {
         profilePictureImage.image = profilePicture
         }
         setCircleImage()
-        if let user = self.user {
-            firstNameLabel.text = user.firstName
-            lastNameLabel.text = user.lastName
-            profilePictureImage.image = user.convertToImage()
-            nicknameLabel.text = user.nickname
-        }
     }
     
     @IBAction func unwindFromColourChoice(unwindSegue: UIStoryboardSegue) {
         let sourceViewController = unwindSegue.source as? ChooseColourTableViewController
         if let colourChosen = sourceViewController?.colourChoice {
-            self.themeColour = colourChosen
+            self.themeColourLabel.text = colourChosen
         }
         updateUI()
     }
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "unwindSave" {
-            self.user = User(firstName: firstName!, lastName: lastName!, nickname: nickname, profilePicture: profilePicture, themeColour: themeColour)
-        }
-    }
+    
     
 
 }

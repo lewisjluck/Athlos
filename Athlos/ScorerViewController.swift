@@ -13,19 +13,81 @@ class ScorerViewController: UIViewController {
     
     @IBOutlet weak var scoreLabel1: UILabel!
     @IBOutlet weak var scoreLabel2: UILabel!
+    
+    @IBOutlet weak var playerOneNameLabel: UILabel!
+    @IBOutlet weak var playerTwoNameLabel: UILabel!
+    
+    @IBOutlet weak var playerOneProfilePicture: UIImageView!
+    @IBOutlet weak var playerTwoProfilePicture: UIImageView!
+    
+    @IBOutlet weak var playerOneBackgroundColour: UIView!
+    @IBOutlet weak var playerTwoBackgroundColour: UIView!
+    
     @IBOutlet weak var microphoneBarItem: UIBarButtonItem!
+    
+    @IBOutlet weak var playerOneSetsLabel: UILabel!
+    @IBOutlet weak var playerTwoSetsLabel: UILabel!
     
     var score1 = 0
     var score2 = 0
     
+    let playerOneUser = gameSettings.playerOne
+    
+    func updateUI() {
+        if let player1 = gameSettings.playerOne {
+            playerOneNameLabel.text = player1.nickname ?? player1.description
+            playerOneProfilePicture.image = player1.convertToImage()
+            playerOneBackgroundColour.backgroundColor = User.convertToColour(colour: player1.themeColour!)
+            playerOneProfilePicture.layer.cornerRadius = playerOneProfilePicture.frame.height/2
+            playerOneProfilePicture.layer.masksToBounds = false
+            playerOneProfilePicture.clipsToBounds = true
+            
+        }
+        if let player2 = gameSettings.playerTwo {
+            playerTwoNameLabel.text = player2.nickname ?? player2.description
+            playerTwoProfilePicture.image = player2.convertToImage()
+            playerTwoBackgroundColour.backgroundColor = User.convertToColour(colour: player2.themeColour!)
+            playerTwoProfilePicture.layer.cornerRadius = playerTwoProfilePicture.frame.height/2
+            playerTwoProfilePicture.layer.masksToBounds = false
+            playerTwoProfilePicture.clipsToBounds = true
+        }
+        if gameSettings.playerOne == nil {
+            playerOneNameLabel.text = "Guest 1"
+            playerOneProfilePicture.image = #imageLiteral(resourceName: "man-2")
+            playerOneBackgroundColour.backgroundColor = User.convertToColour(colour: "Red")
+            playerOneProfilePicture.layer.cornerRadius = playerOneProfilePicture.frame.height/2
+            playerOneProfilePicture.layer.masksToBounds = false
+            playerOneProfilePicture.clipsToBounds = true
+        }
+        if gameSettings.playerTwo == nil {
+            playerTwoNameLabel.text = "Guest 2"
+            playerTwoProfilePicture.image = #imageLiteral(resourceName: "man")
+            playerTwoBackgroundColour.backgroundColor = User.convertToColour(colour: "Blue")
+            playerTwoProfilePicture.layer.cornerRadius = playerTwoProfilePicture.frame.height/2
+            playerTwoProfilePicture.layer.masksToBounds = false
+            playerTwoProfilePicture.clipsToBounds = true
+        }
+        if gameSettings.setsToWin != nil {
+            playerOneSetsLabel.isEnabled = true
+            playerTwoSetsLabel.isEnabled = true
+        }
+    }
+    
     @IBAction func unwindFromGameSettings(unwindSegue: UIStoryboardSegue) {
-        
+        updateUI()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        updateUI()
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+            updateScore()
             updateUI()
-        print("Hello")
+            playerOneSetsLabel.isEnabled = false
+            playerTwoSetsLabel.isEnabled = false
+        
         // Do any additional setup after loading the view.
     }
 
@@ -36,22 +98,26 @@ class ScorerViewController: UIViewController {
     
     @IBAction func addUser1(_ sender: UIButton) {
         score1 += 1
-        updateUI()
+        updateScore()
     }
     
     @IBAction func minusUser1(_ sender: UIButton) {
+        if score1 > 0 {
         score1 -= 1
-        updateUI()
+        updateScore()
+        }
     }
     
     @IBAction func addUser2(_ sender: UIButton) {
         score2 += 1
-        updateUI()
+        updateScore()
     }
     
     @IBAction func minusUser2(_ sender: UIButton) {
+        if score2 > 0 {
         score2 -= 1
-        updateUI()
+        updateScore()
+        }
     }
     
     @IBAction func recordingStarted(_ sender: Any) {
@@ -62,11 +128,57 @@ class ScorerViewController: UIViewController {
         }
     }
     
+    func presentWinScreen(playerOneWon: Bool) {
+        var winner: String
+        if playerOneWon {
+            winner = gameSettings.playerOne?.nickname ?? gameSettings.playerOne?.firstName ?? "Guest 1"
+            playerOneBackgroundColour.backgroundColor?.withAlphaComponent(1)
+            playerTwoBackgroundColour.backgroundColor?.withAlphaComponent(0.5)
+        } else {
+            winner = gameSettings.playerTwo?.nickname ?? gameSettings.playerTwo?.firstName ?? "Guest 1"
+            playerTwoBackgroundColour.backgroundColor?.withAlphaComponent(1)
+            playerOneBackgroundColour.backgroundColor?.withAlphaComponent(0.5)
+        }
+        
+        let alertController = UIAlertController(title: "\(winner) Won!", message: nil, preferredStyle: .alert)
+        
+        let playAgainAction = UIAlertAction(title: "Play Again", style: .default) { (action) in
+            self.score2 = 0
+            self.score1 = 0
+            self.updateScore()
+        }
+        
+        alertController.addAction(playAgainAction)
+        
+        present(alertController, animated: true, completion: nil)
+        
+    }
     
-    
-    func updateUI() {
+    func updateScore() {
         scoreLabel1.text = "\(score1)"
         scoreLabel2.text = "\(score2)"
+        guard gameSettings.casual == false else {return}
+        let scoreToWin = gameSettings.scoreToWin ?? 11
+        if score2 >= scoreToWin && score1 <= score2 - 2 {
+            if let playerTwoIndex = gameSettings.playerTwoIndex {
+                User.users[playerTwoIndex].games.append(Game(won: true, score: score2, sport: gameSettings.sport ?? "Table Tennis", setNumber: gameSettings.setsToWin ?? 1, date: Date()))
+                if let playerOneIndex = gameSettings.playerOneIndex {
+                    User.users[playerOneIndex].games.append(Game(won: false, score: score1, sport: gameSettings.sport ?? "TableTennis", setNumber: gameSettings.setsToWin ?? 1, date: Date()))
+                }
+            }
+            presentWinScreen(playerOneWon: false)
+        }
+        if score1 >= scoreToWin && score2 <= score1 - 2 {
+            if let playerOneIndex = gameSettings.playerOneIndex {
+                User.users[playerOneIndex].games.append(Game(won: true, score: score1, sport: gameSettings.sport ?? "Table Tennis", setNumber: gameSettings.setsToWin ?? 1, date: Date()))
+                if let playerTwoIndex = gameSettings.playerTwoIndex {
+                    User.users[playerTwoIndex].games.append(Game(won: false, score: score2, sport: gameSettings.sport ?? "Table Tennis", setNumber: gameSettings.setsToWin ?? 1, date: Date()))
+                }
+                presentWinScreen(playerOneWon: true)
+            }
+        
+            
+        }
     }
     
     let audioEngine = AVAudioEngine()
@@ -104,11 +216,22 @@ class ScorerViewController: UIViewController {
             
             let lowercasedLastString = lastString.lowercased()
             
-            if lowercasedLastString == "one" || lowercasedLastString == "1" || lowercasedLastString == "two" || lowercasedLastString == "2" || lowercasedLastString == "to" || lowercasedLastString == "too"  {
-            print("ifStatementCalled")
+            if lowercasedLastString == "one" || lowercasedLastString == "1" || lowercasedLastString == "two" || lowercasedLastString == "2" || lowercasedLastString == "to" || lowercasedLastString == "too" {
             self.stopAudio()
-            self.addScore(string: lastString)
+            self.addScore(string: lowercasedLastString)
             }
+                guard let player1 = gameSettings.playerOne, let player2 = gameSettings.playerTwo else {return}
+                if lowercasedLastString == player1.firstName.lowercased() || lowercasedLastString == player2.firstName.lowercased() {
+                    self.stopAudio()
+                    self.addScore(string: lowercasedLastString)
+                }
+                guard let playerOneNickname = player1.nickname?.lowercased(), let playerTwoNickname = player2.nickname?.lowercased() else {return}
+                    if lowercasedLastString == playerOneNickname || lowercasedLastString == playerTwoNickname {
+                        self.stopAudio()
+                        self.addScore(string: lowercasedLastString)
+                    }
+                
+            
         } else if let error = error {
             print(error)
             }})
@@ -125,7 +248,7 @@ class ScorerViewController: UIViewController {
     
     func addScore(string: String) {
         print("addScoreCalled with \(string)")
-        switch string.lowercased() {
+        switch string {
         case "one": score1 += 1
             print("received")
         case "1": score1 += 1
@@ -133,9 +256,13 @@ class ScorerViewController: UIViewController {
         case "to": score2 += 1
         case "too": score2 += 1
         case "2": score2 += 1
+        case gameSettings.playerOne?.nickname?.lowercased(): score1 += 1
+        case gameSettings.playerOne?.firstName.lowercased(): score1 += 1
+        case gameSettings.playerTwo?.nickname?.lowercased(): score2 += 1
+        case gameSettings.playerTwo?.firstName.lowercased(): score2 += 1
         default: break
         }
-        updateUI()
+        updateScore()
         recordAndRecognizeSpeech()
     }
 

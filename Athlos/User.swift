@@ -20,7 +20,7 @@ struct User: Equatable, CustomStringConvertible, Codable, Comparable {
     }
     
     static func convertToColour(colour: String) -> UIColor {
-        var selectedThemeColour: UIColor = UIColor.blue
+        var selectedThemeColour: UIColor = UIColor.black
         switch colour {
             case "Red": selectedThemeColour = UIColor(displayP3Red: 252/255, green: 33/255, blue: 37/255, alpha: 0.75)
             case "Blue": selectedThemeColour = UIColor(displayP3Red: 29/255, green: 155/255, blue: 246/255, alpha: 0.75)
@@ -51,7 +51,7 @@ struct User: Equatable, CustomStringConvertible, Codable, Comparable {
         return lhs.wins < rhs.wins
     }
     
-    var games: [Game] = [Game()]
+    var games: [Game] = []
     
     var totalPoints: Int {
         var count = 0
@@ -60,6 +60,7 @@ struct User: Equatable, CustomStringConvertible, Codable, Comparable {
         }
         return count
     }
+    
     var wins: Int {
         var winCount = 0
         for game in games {
@@ -83,6 +84,11 @@ struct User: Equatable, CustomStringConvertible, Codable, Comparable {
         return Double(wins/losses)
     }
     
+    static var leaderboardUsers: [User] {
+        
+        return users.sorted(by: <)
+    }
+    
     static func ==(lhs: User, rhs: User) -> Bool {
         return lhs.firstName == rhs.firstName && lhs.lastName == rhs.lastName
     }
@@ -95,10 +101,7 @@ struct User: Equatable, CustomStringConvertible, Codable, Comparable {
         self.firstName = firstName
         self.lastName = lastName
         self.nickname = nickname
-        if let profilePicture = profilePicture {
-            let profilePictureData = UIImageJPEGRepresentation(profilePicture, 0.7)
-            self.profilePicture = profilePictureData
-        } else {
+        if profilePicture == nil || profilePicture == #imageLiteral(resourceName: "EmptyProfilePic") {
                 let randomNumber = Int(arc4random_uniform(4))
                 var randomProfilePicture: UIImage
                 switch randomNumber {
@@ -110,7 +113,12 @@ struct User: Equatable, CustomStringConvertible, Codable, Comparable {
                 }
                 let randomPictureData = UIImageJPEGRepresentation(randomProfilePicture, 0.7)
                 self.profilePicture = randomPictureData
+        } else {
+            if let profilePicture = profilePicture {
+                let profilePictureData = UIImageJPEGRepresentation(profilePicture, 0.7)
+                self.profilePicture = profilePictureData
             }
+        }
         if let themeColour = themeColour {
             self.themeColour = themeColour
         } else {
@@ -145,7 +153,6 @@ struct User: Equatable, CustomStringConvertible, Codable, Comparable {
         let encoder = PropertyListEncoder()
         let encodedUsers = try? encoder.encode(users)
         try? encodedUsers?.write(to: User.ArchiveURL, options: .noFileProtection)
-        print("Data has been saved")
     }
     
     static func loadFromFile() -> [User]? {
@@ -159,12 +166,11 @@ struct User: Equatable, CustomStringConvertible, Codable, Comparable {
 }
 
 struct Game: Codable {
-    var won: Bool?
-    var score: Int = 0
-    var sport: String = "Table Tennis"
-    var sets: Bool = false
-    var setNumber: Int?
-    var date: Date = Date()
+    var won: Bool
+    var score: Int
+    var sport: String
+    var setNumber: Int
+    var date: Date
 }
 
 let sportArray = ["Table Tennis", "Football"]
@@ -176,6 +182,10 @@ struct GameSettings: Codable {
     var playerTwo: User?
     var scoreToWin: Int?
     var setsToWin: Int?
+    var sport: String?
+    var playerOneIndex: Int?
+    var playerTwoIndex: Int?
+    var casual: Bool?
     
     static let DocumentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
     static let ArchiveURL = DocumentsDirectory.appendingPathComponent("game_settings").appendingPathExtension("plist")
@@ -197,11 +207,12 @@ struct GameSettings: Codable {
     }
 }
 
-var gameSettings: GameSettings = GameSettings() {
+var gameSettings = GameSettings(playerOne: nil, playerTwo: nil, scoreToWin: nil, setsToWin: nil, sport: nil, playerOneIndex: nil, playerTwoIndex: nil, casual: false) {
     didSet {
         GameSettings.saveToFile(gameSettings: gameSettings)
     }
 }
+
 
 
 
