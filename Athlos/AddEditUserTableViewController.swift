@@ -143,6 +143,7 @@ class AddEditUserTableViewController: UITableViewController, UIImagePickerContro
     }
     
     func updateSaveButton() {
+        guard editingUser == false else {saveButton.isEnabled = true; return}
         let firstNameCheck = firstNameLabel.text ?? ""
         let lastNameCheck = lastNameLabel.text ?? ""
         saveButton.isEnabled = !firstNameCheck.isEmpty && !lastNameCheck.isEmpty

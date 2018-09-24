@@ -169,7 +169,6 @@ struct Game: Codable {
     var won: Bool
     var score: Int
     var sport: String
-    var setNumber: Int
     var date: Date
 }
 
@@ -181,7 +180,6 @@ struct GameSettings: Codable {
     var playerOne: User?
     var playerTwo: User?
     var scoreToWin: Int?
-    var setsToWin: Int?
     var sport: String?
     var playerOneIndex: Int?
     var playerTwoIndex: Int?
@@ -207,7 +205,7 @@ struct GameSettings: Codable {
     }
 }
 
-var gameSettings = GameSettings(playerOne: nil, playerTwo: nil, scoreToWin: nil, setsToWin: nil, sport: nil, playerOneIndex: nil, playerTwoIndex: nil, casual: false) {
+var gameSettings = GameSettings(playerOne: nil, playerTwo: nil, scoreToWin: nil, sport: nil, playerOneIndex: nil, playerTwoIndex: nil, casual: false) {
     didSet {
         GameSettings.saveToFile(gameSettings: gameSettings)
     }

@@ -11,8 +11,6 @@ import UIKit
 class ScorerSettingsTableViewController: UITableViewController, UIPopoverControllerDelegate {
     @IBOutlet weak var scoreToWinControl: UISegmentedControl!
     @IBOutlet weak var sport: UISegmentedControl!
-    @IBOutlet weak var setsToWin: UILabel!
-    @IBOutlet weak var setsToWinStepper: UIStepper!
     @IBOutlet weak var playerOneLabel: UILabel!
     @IBOutlet weak var playerTwoLabel: UILabel!
     @IBOutlet weak var playerOneProfilePic: UIImageView!
@@ -20,6 +18,7 @@ class ScorerSettingsTableViewController: UITableViewController, UIPopoverControl
     @IBOutlet weak var playerOneColour: UIView!
     @IBOutlet weak var playerTwoColour: UIView!
     @IBOutlet weak var saveScoresSwitch: UISwitch!
+    @IBOutlet weak var showGameScoresSwitch: UISwitch!
     
     
     override func viewDidLoad() {
@@ -37,7 +36,6 @@ class ScorerSettingsTableViewController: UITableViewController, UIPopoverControl
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "saveGameSettings" {
             gameSettings.scoreToWin = Int(scoreToWinControl.titleForSegment(at: scoreToWinControl.selectedSegmentIndex)!)
-            gameSettings.setsToWin = Int(setsToWin.text!)
             gameSettings.sport = sport.titleForSegment(at: sport.selectedSegmentIndex)
             gameSettings.casual = !saveScoresSwitch.isOn
         }
@@ -59,10 +57,6 @@ class ScorerSettingsTableViewController: UITableViewController, UIPopoverControl
             
             scoreToWinControl.selectedSegmentIndex = segmentIndex
         }
-        if let setsToWinSaved = gameSettings.setsToWin {
-            setsToWin.text = "\(setsToWinSaved)"
-            setsToWinStepper.value = Double(setsToWinSaved)
-        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -75,10 +69,6 @@ class ScorerSettingsTableViewController: UITableViewController, UIPopoverControl
         if indexPath.section == 0 && indexPath.row == 0 {
             performSegue(withIdentifier: "choosePlayer", sender: nil)
         }
-    }
-    
-    @IBAction func stepperValueChanged(_ sender: UIStepper) {
-        updateSetsToWin()
     }
     
     func updatePlayers() {
@@ -98,10 +88,6 @@ class ScorerSettingsTableViewController: UITableViewController, UIPopoverControl
             playerTwoProfilePic.layer.masksToBounds = false
             playerTwoProfilePic.clipsToBounds = true
         }
-    }
-    
-    func updateSetsToWin() {
-        setsToWin.text = "\(Int(setsToWinStepper.value))"
     }
     
     @IBAction func unwindFromChoosePlayer(unwindSegue: UIStoryboardSegue) {

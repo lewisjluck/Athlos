@@ -25,9 +25,6 @@ class ScorerViewController: UIViewController {
     
     @IBOutlet weak var microphoneBarItem: UIBarButtonItem!
     
-    @IBOutlet weak var playerOneSetsLabel: UILabel!
-    @IBOutlet weak var playerTwoSetsLabel: UILabel!
-    
     var score1 = 0
     var score2 = 0
     
@@ -67,10 +64,6 @@ class ScorerViewController: UIViewController {
             playerTwoProfilePicture.layer.masksToBounds = false
             playerTwoProfilePicture.clipsToBounds = true
         }
-        if gameSettings.setsToWin != nil {
-            playerOneSetsLabel.isEnabled = true
-            playerTwoSetsLabel.isEnabled = true
-        }
     }
     
     @IBAction func unwindFromGameSettings(unwindSegue: UIStoryboardSegue) {
@@ -85,8 +78,6 @@ class ScorerViewController: UIViewController {
         super.viewDidLoad()
             updateScore()
             updateUI()
-            playerOneSetsLabel.isEnabled = false
-            playerTwoSetsLabel.isEnabled = false
         
         // Do any additional setup after loading the view.
     }
@@ -161,18 +152,18 @@ class ScorerViewController: UIViewController {
         let scoreToWin = gameSettings.scoreToWin ?? 11
         if score2 >= scoreToWin && score1 <= score2 - 2 {
             if let playerTwoIndex = gameSettings.playerTwoIndex {
-                User.users[playerTwoIndex].games.append(Game(won: true, score: score2, sport: gameSettings.sport ?? "Table Tennis", setNumber: gameSettings.setsToWin ?? 1, date: Date()))
+                User.users[playerTwoIndex].games.append(Game(won: true, score: score2, sport: gameSettings.sport ?? "Table Tennis", date: Date()))
                 if let playerOneIndex = gameSettings.playerOneIndex {
-                    User.users[playerOneIndex].games.append(Game(won: false, score: score1, sport: gameSettings.sport ?? "TableTennis", setNumber: gameSettings.setsToWin ?? 1, date: Date()))
+                    User.users[playerOneIndex].games.append(Game(won: false, score: score1, sport: gameSettings.sport ?? "TableTennis", date: Date()))
                 }
             }
             presentWinScreen(playerOneWon: false)
         }
         if score1 >= scoreToWin && score2 <= score1 - 2 {
             if let playerOneIndex = gameSettings.playerOneIndex {
-                User.users[playerOneIndex].games.append(Game(won: true, score: score1, sport: gameSettings.sport ?? "Table Tennis", setNumber: gameSettings.setsToWin ?? 1, date: Date()))
+                User.users[playerOneIndex].games.append(Game(won: true, score: score1, sport: gameSettings.sport ?? "Table Tennis", date: Date()))
                 if let playerTwoIndex = gameSettings.playerTwoIndex {
-                    User.users[playerTwoIndex].games.append(Game(won: false, score: score2, sport: gameSettings.sport ?? "Table Tennis", setNumber: gameSettings.setsToWin ?? 1, date: Date()))
+                    User.users[playerTwoIndex].games.append(Game(won: false, score: score2, sport: gameSettings.sport ?? "Table Tennis", date: Date()))
                 }
                 presentWinScreen(playerOneWon: true)
             }
@@ -220,17 +211,37 @@ class ScorerViewController: UIViewController {
             self.stopAudio()
             self.addScore(string: lowercasedLastString)
             }
-                guard let player1 = gameSettings.playerOne, let player2 = gameSettings.playerTwo else {return}
-                if lowercasedLastString == player1.firstName.lowercased() || lowercasedLastString == player2.firstName.lowercased() {
+            if let player1 = gameSettings.playerOne {
+                    print("Players recognised")
+                if lowercasedLastString == player1.firstName.lowercased() {
                     self.stopAudio()
                     self.addScore(string: lowercasedLastString)
-                }
-                guard let playerOneNickname = player1.nickname?.lowercased(), let playerTwoNickname = player2.nickname?.lowercased() else {return}
-                    if lowercasedLastString == playerOneNickname || lowercasedLastString == playerTwoNickname {
+            }
+                if let playerOneNickname = player1.nickname?.lowercased() {
+                    print("Nickname recognised")
+                    if lowercasedLastString == playerOneNickname {
                         self.stopAudio()
                         self.addScore(string: lowercasedLastString)
                     }
-                
+                }
+            }
+            if let player2 = gameSettings.playerTwo {
+                    print("Players recognised")
+                if lowercasedLastString == player2.firstName.lowercased() {
+                    self.stopAudio()
+                    self.addScore(string: lowercasedLastString)
+                }
+                if let playerTwoNickname = player2.nickname?.lowercased() {
+                    print("Nickname recognised")
+                    if lowercasedLastString == playerTwoNickname {
+                        self.stopAudio()
+                        self.addScore(string: lowercasedLastString)
+                    }
+                    
+                }
+                }
+            
+            
             
         } else if let error = error {
             print(error)
