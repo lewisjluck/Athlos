@@ -1,5 +1,6 @@
 # Athlos
+Created by Lewis Luck, CEO of Fortune Inc. 
 
-An application for scoring games.
+Athlos, whose name means sport in Ancient Greek, is a sport-scoring application that allows users to enter, save, compare and compete with each other's scores. 
 
-Athlos means sport in Ancient Greek.
+User customization, voice recognition, leaderboard functionality and an updating statistics page are some features. 
