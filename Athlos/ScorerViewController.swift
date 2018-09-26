@@ -152,18 +152,18 @@ class ScorerViewController: UIViewController {
         let scoreToWin = gameSettings.scoreToWin ?? 11
         if score2 >= scoreToWin && score1 <= score2 - 2 {
             if let playerTwoIndex = gameSettings.playerTwoIndex {
-                User.users[playerTwoIndex].games.append(Game(won: true, score: score2, sport: gameSettings.sport ?? "Table Tennis", date: Date()))
+                User.users[playerTwoIndex].games.append(Game(won: true, score: score2, sport: gameSettings.sport ?? "Table Tennis", date: Date(), opponent: gameSettings.playerOne!))
                 if let playerOneIndex = gameSettings.playerOneIndex {
-                    User.users[playerOneIndex].games.append(Game(won: false, score: score1, sport: gameSettings.sport ?? "TableTennis", date: Date()))
+                    User.users[playerOneIndex].games.append(Game(won: false, score: score1, sport: gameSettings.sport ?? "TableTennis", date: Date(), opponent: gameSettings.playerTwo!))
                 }
             }
             presentWinScreen(playerOneWon: false)
         }
         if score1 >= scoreToWin && score2 <= score1 - 2 {
             if let playerOneIndex = gameSettings.playerOneIndex {
-                User.users[playerOneIndex].games.append(Game(won: true, score: score1, sport: gameSettings.sport ?? "Table Tennis", date: Date()))
+                User.users[playerOneIndex].games.append(Game(won: true, score: score1, sport: gameSettings.sport ?? "Table Tennis", date: Date(), opponent: gameSettings.playerTwo!))
                 if let playerTwoIndex = gameSettings.playerTwoIndex {
-                    User.users[playerTwoIndex].games.append(Game(won: false, score: score2, sport: gameSettings.sport ?? "Table Tennis", date: Date()))
+                    User.users[playerTwoIndex].games.append(Game(won: false, score: score2, sport: gameSettings.sport ?? "Table Tennis", date: Date(), opponent: gameSettings.playerOne!))
                 }
                 presentWinScreen(playerOneWon: true)
             }

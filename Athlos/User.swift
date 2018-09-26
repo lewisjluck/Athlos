@@ -48,7 +48,11 @@ struct User: Equatable, CustomStringConvertible, Codable, Comparable {
     }
     
     static func < (rhs: User, lhs: User) -> Bool {
+        if lhs.wins == rhs.wins {
+            return lhs.totalPoints < rhs.totalPoints
+        } else {
         return lhs.wins < rhs.wins
+        }
     }
     
     var games: [Game] = []
@@ -170,6 +174,7 @@ struct Game: Codable {
     var score: Int
     var sport: String
     var date: Date
+    var opponent: User
 }
 
 let sportArray = ["Table Tennis", "Football"]

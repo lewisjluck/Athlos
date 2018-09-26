@@ -1,22 +1,27 @@
 //
-//  LeaderboardTableViewController.swift
+//  GameHistoryTableViewController.swift
 //  Athlos
 //
-//  Created by Lewis Luck on 19/9/18.
+//  Created by Lewis Luck on 26/9/18.
 //  Copyright © 2018 Fortune Inc. All rights reserved.
 //
 
 import UIKit
 
-class LeaderboardTableViewController: UITableViewController {
+class GameHistoryTableViewController: UITableViewController {
 
+    var userIndex: Int?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
+        self.navigationItem.leftBarButtonItem?.tintColor = UIColor.white
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -27,23 +32,19 @@ class LeaderboardTableViewController: UITableViewController {
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
         return 1
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
-        return User.leaderboardUsers.count
+        return User.users[userIndex!].games.count
+            
     }
 
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "leaderboardCell", for: indexPath)
-        let
-        user = User.leaderboardUsers[indexPath.row]
-        print(user)
-        cell.textLabel?.text = "\(indexPath.row + 1). \(user.nickname ?? user.description)"
-        cell.detailTextLabel?.text = "\(user.wins) Wins"
+        let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
+        let game = User.users[userIndex!].games[indexPath.row]
+        
 
         return cell
     }

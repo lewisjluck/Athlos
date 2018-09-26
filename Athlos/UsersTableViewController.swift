@@ -54,19 +54,11 @@ class UsersTableViewController: UITableViewController {
     @IBAction func unwindFromAddUser(unwindSegue: UIStoryboardSegue) {
         guard let source = unwindSegue.source as? AddEditUserTableViewController, let addedUser = source.user else {return}
         if source.editingUser == true {
-            var editedUser = User.users[userIndex]
-            editedUser.firstName = addedUser.firstName
-            editedUser.lastName = addedUser.lastName
-            editedUser.nickname = addedUser.nickname
-            editedUser.themeColour = addedUser.themeColour
-            editedUser.profilePicture = addedUser.profilePicture
-            if User.users[userIndex] == gameSettings.playerOne {
-                gameSettings.playerOne = editedUser
-            }
-            if User.users[userIndex] == gameSettings.playerTwo {
-                gameSettings.playerTwo = editedUser
-            }
-            User.users[userIndex] = editedUser
+            User.users[userIndex].firstName = addedUser.firstName
+            User.users[userIndex].lastName = addedUser.lastName
+            User.users[userIndex].nickname = addedUser.nickname
+            User.users[userIndex].themeColour = addedUser.themeColour
+            User.users[userIndex].profilePicture = addedUser.profilePicture
             userIndex = 0
         } else {
             User.users.append(addedUser)
@@ -144,6 +136,7 @@ class UsersTableViewController: UITableViewController {
             destination.title = selectedUser.description
             destination.user = selectedUser
             destination.editingUser = true
+            destination.userIndex = selectedIndexPath.row
             }
         }
     }

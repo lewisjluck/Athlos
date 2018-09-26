@@ -16,6 +16,7 @@ class AddEditUserTableViewController: UITableViewController, UIImagePickerContro
     @IBOutlet weak var themeColourLabel: UILabel!
     @IBOutlet weak var themeColourCell: UITableViewCell!
     @IBOutlet weak var saveButton: UIBarButtonItem!
+    @IBOutlet weak var historyButton: UIBarButtonItem!
     
     var firstName: String? {
         return firstNameLabel.text
@@ -45,6 +46,8 @@ class AddEditUserTableViewController: UITableViewController, UIImagePickerContro
     
     var editingUser: Bool = false
     
+    var userIndex: Int?
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "saveUser" {
             if self.user != nil {
@@ -52,6 +55,9 @@ class AddEditUserTableViewController: UITableViewController, UIImagePickerContro
             } else {
             self.user = User(firstName: firstName!, lastName: lastName!, nickname: nickname, profilePicture: profilePicture, themeColour: themeColour)
             }
+        } else if segue.identifier == "history" {
+            let destination = segue.destination as! GameHistoryTableViewController
+            destination.userIndex = self.userIndex
         }
     }
     
@@ -128,9 +134,6 @@ class AddEditUserTableViewController: UITableViewController, UIImagePickerContro
             updateUI()
         }
     }
-    @IBAction func cancel(_ sender: UIBarButtonItem) {
-        dismiss(animated: true, completion: nil)
-    }
     
     func updateColourCell() {
          if let themeColour = themeColour {
@@ -142,20 +145,17 @@ class AddEditUserTableViewController: UITableViewController, UIImagePickerContro
         }
     }
     
-    func updateSaveButton() {
-        guard editingUser == false else {saveButton.isEnabled = true; return}
-        let firstNameCheck = firstNameLabel.text ?? ""
-        let lastNameCheck = lastNameLabel.text ?? ""
-        saveButton.isEnabled = !firstNameCheck.isEmpty && !lastNameCheck.isEmpty
-    }
-    
-    @IBAction func textEditingChanged(_ sender: UITextField) {
-        updateSaveButton()
+    func updateHistoryButton() {
+        historyButton.isEnabled = false
+        guard editingUser == true else {return}
+        if !User.users[userIndex!].games.isEmpty {
+            historyButton.isEnabled = true
+        }
     }
     
     func updateUI() {
         updateColourCell()
-        updateSaveButton()
+        updateHistoryButton()
         if profilePicture != nil {
         profilePictureImage.image = profilePicture
         }

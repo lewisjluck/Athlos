@@ -22,6 +22,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if let savedGameSettings = GameSettings.loadFromFile() {
             gameSettings = savedGameSettings
         }
+        
         return true
     }
 

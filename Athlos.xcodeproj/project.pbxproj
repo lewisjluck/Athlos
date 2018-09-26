@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9BA869B8215B5C7D00F1B2C7 /* GameHistoryTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BA869B7215B5C7D00F1B2C7 /* GameHistoryTableViewController.swift */; };
+		9BA869BA215B6F6B00F1B2C7 /* GameHistoryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BA869B9215B6F6B00F1B2C7 /* GameHistoryTableViewCell.swift */; };
 		FF040F8821525C0500837968 /* LeaderboardTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF040F8721525C0500837968 /* LeaderboardTableViewController.swift */; };
 		FF416056213B5835002B3666 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF416055213B5835002B3666 /* AppDelegate.swift */; };
 		FF41605B213B5835002B3666 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FF416059213B5835002B3666 /* Main.storyboard */; };
@@ -23,6 +25,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		9BA869B7215B5C7D00F1B2C7 /* GameHistoryTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameHistoryTableViewController.swift; sourceTree = "<group>"; };
+		9BA869B9215B6F6B00F1B2C7 /* GameHistoryTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameHistoryTableViewCell.swift; sourceTree = "<group>"; };
 		FF040F8721525C0500837968 /* LeaderboardTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeaderboardTableViewController.swift; sourceTree = "<group>"; };
 		FF416052213B5835002B3666 /* Athlos.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Athlos.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FF416055213B5835002B3666 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -80,6 +84,8 @@
 				FF87E7B3214E55B200E621C7 /* ScorerSettingsTableViewController.swift */,
 				FF87E7B5214E587100E621C7 /* ChoosePlayersTableViewController.swift */,
 				FF040F8721525C0500837968 /* LeaderboardTableViewController.swift */,
+				9BA869B7215B5C7D00F1B2C7 /* GameHistoryTableViewController.swift */,
+				9BA869B9215B6F6B00F1B2C7 /* GameHistoryTableViewCell.swift */,
 				FF416059213B5835002B3666 /* Main.storyboard */,
 				FF41605C213B583F002B3666 /* Assets.xcassets */,
 				FF41605E213B583F002B3666 /* LaunchScreen.storyboard */,
@@ -159,10 +165,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9BA869BA215B6F6B00F1B2C7 /* GameHistoryTableViewCell.swift in Sources */,
 				FF87E7B4214E55B300E621C7 /* ScorerSettingsTableViewController.swift in Sources */,
 				FFC0E180214C7DE7009DEE4F /* UserTableViewCell.swift in Sources */,
 				FF416056213B5835002B3666 /* AppDelegate.swift in Sources */,
 				FFC0E184214CDB19009DEE4F /* AddEditUserTableViewController.swift in Sources */,
+				9BA869B8215B5C7D00F1B2C7 /* GameHistoryTableViewController.swift in Sources */,
 				FF41608C21436A10002B3666 /* ScorerViewController.swift in Sources */,
 				FF040F8821525C0500837968 /* LeaderboardTableViewController.swift in Sources */,
 				FFC0E182214C8FF6009DEE4F /* UsersTableViewController.swift in Sources */,
