@@ -170,11 +170,13 @@ struct User: Equatable, CustomStringConvertible, Codable, Comparable {
 }
 
 struct Game: Codable {
+    var player: User
     var won: Bool
     var score: Int
     var sport: String
     var date: Date
     var opponent: User
+    var opponentScore: Int
 }
 
 let sportArray = ["Table Tennis", "Football"]

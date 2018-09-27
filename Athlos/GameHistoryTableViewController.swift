@@ -42,9 +42,9 @@ class GameHistoryTableViewController: UITableViewController {
 
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "GameCell", for: indexPath) as! GameHistoryTableViewCell
         let game = User.users[userIndex!].games[indexPath.row]
-        
+        cell.updateCell(game: game)
 
         return cell
     }
