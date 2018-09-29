@@ -54,6 +54,12 @@ class UsersTableViewController: UITableViewController {
     @IBAction func unwindFromAddUser(unwindSegue: UIStoryboardSegue) {
         guard let source = unwindSegue.source as? AddEditUserTableViewController, let addedUser = source.user else {return}
         if source.editingUser == true {
+            if User.users[userIndex].description == gameSettings.playerOne?.description {
+                gameSettings.playerOne = addedUser
+            }
+            if User.users[userIndex].description == gameSettings.playerTwo?.description {
+                gameSettings.playerTwo = addedUser
+            }
             User.users[userIndex].firstName = addedUser.firstName
             User.users[userIndex].lastName = addedUser.lastName
             User.users[userIndex].nickname = addedUser.nickname

@@ -9,6 +9,8 @@
 import Foundation
 import UIKit
 
+let themeColour = UIColor(red: 19/255, green: 96/255, blue: 109/255, alpha: 0.75)
+
 struct User: Equatable, CustomStringConvertible, Codable, Comparable {
     var firstName: String
     var lastName: String
@@ -58,11 +60,15 @@ struct User: Equatable, CustomStringConvertible, Codable, Comparable {
     var games: [Game] = []
     
     var totalPoints: Int {
-        var count = 0
+        var pointCount = 0
         for game in games {
-            count += game.score
+            pointCount += game.score
         }
-        return count
+        return pointCount
+    }
+    
+    var totalGames: Int {
+        return games.count
     }
     
     var wins: Int {
@@ -85,7 +91,20 @@ struct User: Equatable, CustomStringConvertible, Codable, Comparable {
         }
     
     var winLossRatio: Double {
-        return Double(wins/losses)
+        if losses != 0 {
+        return Double(Double(wins)/Double(losses))
+        } else {
+        return Double.infinity
+        }
+    }
+    
+    var averagePointDifference: Double {
+        guard games.count != 0 else {return Double.infinity}
+        var pointCount = 0
+        for game in games {
+            pointCount += game.pointDifference
+        }
+        return Double(Double(pointCount)/Double(games.count))
     }
     
     static var leaderboardUsers: [User] {
@@ -149,6 +168,8 @@ struct User: Equatable, CustomStringConvertible, Codable, Comparable {
         }
     }
     
+    static var gameId: Int = 0
+    
     static let DocumentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
     static let ArchiveURL = DocumentsDirectory.appendingPathComponent("users").appendingPathExtension("plist")
     
@@ -177,6 +198,10 @@ struct Game: Codable {
     var date: Date
     var opponent: User
     var opponentScore: Int
+    var gameid: Int
+    var pointDifference: Int {
+        return score - opponentScore
+    }
 }
 
 let sportArray = ["Table Tennis", "Football"]
@@ -191,6 +216,7 @@ struct GameSettings: Codable {
     var playerOneIndex: Int?
     var playerTwoIndex: Int?
     var casual: Bool?
+    var gameIDCount: Int
     
     static let DocumentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
     static let ArchiveURL = DocumentsDirectory.appendingPathComponent("game_settings").appendingPathExtension("plist")
@@ -212,7 +238,7 @@ struct GameSettings: Codable {
     }
 }
 
-var gameSettings = GameSettings(playerOne: nil, playerTwo: nil, scoreToWin: nil, sport: nil, playerOneIndex: nil, playerTwoIndex: nil, casual: false) {
+var gameSettings = GameSettings(playerOne: nil, playerTwo: nil, scoreToWin: nil, sport: nil, playerOneIndex: nil, playerTwoIndex: nil, casual: false, gameIDCount: 0) {
     didSet {
         GameSettings.saveToFile(gameSettings: gameSettings)
     }

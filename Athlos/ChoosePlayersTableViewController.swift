@@ -12,6 +12,16 @@ class ChoosePlayersTableViewController: UITableViewController {
 
     var playerOne: User?
     var playerTwo: User?
+    var statsUser: Int?
+    var statistics: Bool = false
+    
+    @IBAction func doneAction(_ sender: Any) {
+        if statistics == false {
+            performSegue(withIdentifier: "unwindToScoreSettings", sender: nil)
+        } else {
+            performSegue(withIdentifier: "unwindToStatistics", sender: nil)
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -44,10 +54,16 @@ class ChoosePlayersTableViewController: UITableViewController {
         let user = User.users[indexPath.row]
         cell.textLabel?.text = user.description
         
-        if user == playerOne {
-            cell.accessoryView = UIImageView(image: #imageLiteral(resourceName: "One"))
-        } else if user == playerTwo {
-            cell.accessoryView = UIImageView(image: #imageLiteral(resourceName: "Two"))
+        if statistics == false {
+            if user == playerOne {
+                cell.accessoryView = UIImageView(image: #imageLiteral(resourceName: "One"))
+            } else if user == playerTwo {
+                cell.accessoryView = UIImageView(image: #imageLiteral(resourceName: "Two"))
+            }
+        } else {
+            if indexPath.row == statsUser {
+                cell.accessoryType = .checkmark
+            }
         }
         
         return cell
@@ -58,15 +74,18 @@ class ChoosePlayersTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         let selectedUser = User.users[indexPath.row]
-        
-        if count % 2 == 1 {
-            playerOne = selectedUser
-            gameSettings.playerOneIndex = indexPath.row
-            count += 1
-        } else if count % 2 == 0 {
-            playerTwo = selectedUser
-            gameSettings.playerTwoIndex = indexPath.row
-            count += 1
+        if statistics == false {
+            if count % 2 == 1 {
+                playerOne = selectedUser
+                gameSettings.playerOneIndex = indexPath.row
+                count += 1
+            } else if count % 2 == 0 {
+                playerTwo = selectedUser
+                gameSettings.playerTwoIndex = indexPath.row
+                count += 1
+            }
+        } else {
+            statsUser = indexPath.row
         }
         tableView.reloadData()
         

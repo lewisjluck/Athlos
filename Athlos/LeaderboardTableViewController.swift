@@ -18,6 +18,10 @@ class LeaderboardTableViewController: UITableViewController {
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
     }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        tableView.reloadData()
+    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -33,14 +37,14 @@ class LeaderboardTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
+        print(User.leaderboardUsers.count)
         return User.leaderboardUsers.count
     }
 
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "leaderboardCell", for: indexPath)
-        let
-        user = User.leaderboardUsers[indexPath.row]
+        let user = User.leaderboardUsers[indexPath.row]
         print(user)
         cell.textLabel?.text = "\(indexPath.row + 1). \(user.nickname ?? user.description)"
         cell.detailTextLabel?.text = "\(user.wins) Wins"

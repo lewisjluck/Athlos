@@ -49,6 +49,10 @@ class AddEditUserTableViewController: UITableViewController, UIImagePickerContro
     var userIndex: Int?
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        print(firstNameLabel.text)
+        print(lastNameLabel.text)
+        guard firstNameLabel.text != nil && firstNameLabel.text != "" && lastNameLabel.text != nil && lastNameLabel.text != "" else {return}
+        print("YOYO")
         if segue.identifier == "saveUser" {
             if self.user != nil {
                 self.user = User(firstName: firstName!, lastName: lastName!, nickname: nickname, profilePicture: profilePicture, themeColour: themeColour)
@@ -56,7 +60,8 @@ class AddEditUserTableViewController: UITableViewController, UIImagePickerContro
             self.user = User(firstName: firstName!, lastName: lastName!, nickname: nickname, profilePicture: profilePicture, themeColour: themeColour)
             }
         } else if segue.identifier == "history" {
-            let destination = segue.destination as! GameHistoryTableViewController
+            let destinationNav = segue.destination as! UINavigationController
+            let destination = destinationNav.topViewController as! GameHistoryTableViewController
             destination.userIndex = self.userIndex
         }
     }
@@ -168,6 +173,10 @@ class AddEditUserTableViewController: UITableViewController, UIImagePickerContro
             self.themeColourLabel.text = colourChosen
         }
         updateUI()
+    }
+    
+    @IBAction func unwindFromGameHistory(unwindSegue: UIStoryboardSegue) {
+        User.saveToFile()
     }
     
     

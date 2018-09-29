@@ -42,6 +42,14 @@ class GameHistoryTableViewCell: UITableViewCell {
         dateFormatter.timeStyle = .none
         
         gameDateLabel.text = dateFormatter.string(from: game.date)
+        if game.won == true {
+            playerOneName.textColor = UIColor.green
+            playerTwoName.textColor = UIColor.red
+        } else {
+            playerOneName.textColor = UIColor.red
+            playerTwoName.textColor = UIColor.green
+        }
     }
 
 }
+
