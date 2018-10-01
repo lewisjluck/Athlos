@@ -19,7 +19,7 @@ class UsersTableViewController: UITableViewController {
         self.navigationItem.rightBarButtonItem = self.editButtonItem
         self.navigationItem.rightBarButtonItem?.tintColor = UIColor.white
     }
-    
+
     var userIndex = 0
     
     override func didReceiveMemoryWarning() {
@@ -39,6 +39,13 @@ class UsersTableViewController: UITableViewController {
         return User.users.count
     }
 
+    func updateEditButton() {
+        if User.users.first == nil {
+            self.navigationItem.rightBarButtonItem?.isEnabled = false
+        } else {
+            self.navigationItem.rightBarButtonItem?.isEnabled = true
+        }
+    }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "UserCell", for: indexPath) as! UserTableViewCell

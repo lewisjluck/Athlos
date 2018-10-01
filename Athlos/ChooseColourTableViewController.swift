@@ -48,6 +48,13 @@ class ChooseColourTableViewController: UITableViewController {
         cell.contentView.backgroundColor = colourUsed
         cell.textLabel?.backgroundColor = colourUsed
         cell.textLabel?.text = colour
+        
+        if colour == self.colourChoice {
+            cell.accessoryType = .checkmark
+        } else {
+            cell.accessoryType = .none
+        }
+        
         return cell
     }
     
@@ -59,6 +66,7 @@ class ChooseColourTableViewController: UITableViewController {
         let selectedColour = colourArray[indexPath.row]
         self.colourChoice = selectedColour
         tableView.deselectRow(at: indexPath, animated: true)
+        tableView.reloadData()
     }
 
     /*

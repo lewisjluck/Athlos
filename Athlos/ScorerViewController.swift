@@ -72,6 +72,9 @@ class ScorerViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         updateUI()
+        if gameSettings.playerOne == nil || gameSettings.playerTwo == nil {
+            gameSettings.casual = true 
+        }
     }
     
     override func viewDidLoad() {

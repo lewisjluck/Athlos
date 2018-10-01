@@ -29,7 +29,7 @@ class LeaderboardTableViewCell: UITableViewCell {
     func updateCell(user: User, position: Int) {
         nameLabel.text = "\(user.description)"
         detailLabel.text = "\(user.wins) Wins"
-        sideDetailLabel.text = "\(user.totalPoints)"
+        sideDetailLabel.text = "Score: \(user.totalPoints)"
         var image: UIImage
         switch position {
         case 1: image = #imageLiteral(resourceName: "First")

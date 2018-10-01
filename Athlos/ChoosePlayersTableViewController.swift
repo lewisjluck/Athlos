@@ -59,10 +59,14 @@ class ChoosePlayersTableViewController: UITableViewController {
                 cell.accessoryView = UIImageView(image: #imageLiteral(resourceName: "One"))
             } else if user == playerTwo {
                 cell.accessoryView = UIImageView(image: #imageLiteral(resourceName: "Two"))
+            } else {
+                cell.accessoryType = .none
             }
         } else {
             if indexPath.row == statsUser {
                 cell.accessoryType = .checkmark
+            } else {
+                cell.accessoryType = .none
             }
         }
         

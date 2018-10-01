@@ -75,6 +75,9 @@ class StatisticsTableViewController: UITableViewController {
             let destination = destinationNav.topViewController as! ChoosePlayersTableViewController
             destination.statistics = true
             destination.navigationItem.title = "Choose Statistics Player"
+            if let statsUserIndex = self.userIndex {
+                destination.statsUser = statsUserIndex
+            }
         }
     }
 
