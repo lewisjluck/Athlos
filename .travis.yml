@@ -1,4 +1,0 @@
-language: objective-c
-xcode_project: Athlos.xcodeproj # path to your xcodeproj folder
-xcode_scheme: Athlos
-xcode_destination: platform=iOS Simulator,OS=10.1,name=iPhone 6
